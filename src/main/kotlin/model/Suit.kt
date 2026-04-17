@@ -9,6 +9,8 @@ enum class Suit {
 
     fun isRed(): Boolean = this == HEARTS || this == DIAMONDS
 
+    fun isBlack(): Boolean = this == CLUBS || this == SPADES
+
     fun displaySymbol(): String =
         when (this) {
             HEARTS -> "♥"
