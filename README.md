@@ -5,8 +5,13 @@ Rules of the game are placed [there](https://en.wikipedia.org/wiki/Klondike_(sol
 
 >For this project I use klinter.
 
-1st-year SPBU student, "Technology of Programming", group 43, Ella Zamyatina
+### Src structure:
+* /model - core entities & classes, data classes
+* /game - game logic
+* /ui - user interface
 
+1st-year SPBU student, "Technology of Programming", group 43, Ella Zamyatina
 ### Contacts
 * mail: ellazamyatina567@gmail.com
 * tg: brbdbrd
+
