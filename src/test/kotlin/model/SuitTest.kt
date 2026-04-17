@@ -7,7 +7,7 @@ import kotlin.test.assertTrue
 
 class SuitTest {
     @Test
-    fun `isRed returns true for HEARTS and DIAMONDS else false`()  {
+    fun `isRed returns true for HEARTS and DIAMONDS else false`() {
         assertTrue(Suit.HEARTS.isRed())
         assertTrue(Suit.DIAMONDS.isRed())
         assertFalse(Suit.SPADES.isRed())
@@ -15,7 +15,7 @@ class SuitTest {
     }
 
     @Test
-    fun `symbol returns correct unicode characters`()  {
+    fun `symbol returns correct unicode characters`() {
         assertEquals("♥", Suit.HEARTS.displaySymbol())
         assertEquals("♦", Suit.DIAMONDS.displaySymbol())
         assertEquals("♠", Suit.SPADES.displaySymbol())
@@ -23,7 +23,7 @@ class SuitTest {
     }
 
     @Test
-    fun `card can't be red and black at the same time`()  {
+    fun `card can't be red and black at the same time`() {
         for (suit in Suit.entries) {
             assertTrue(suit.isRed() != suit.isBlack())
         }
