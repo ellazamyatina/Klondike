@@ -3,7 +3,7 @@ package model
 enum class Rank(
     val value: Int,
 ) {
-    ACE(2),
+    ACE(1),
     TWO(2),
     THREE(3),
     FOUR(4),
