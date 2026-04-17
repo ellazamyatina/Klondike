@@ -2,7 +2,7 @@ package game
 
 import model.Card
 
-abstract class Pile  {
+abstract class Pile {
     protected val cards: MutableList<Card> = mutableListOf<Card>()
 
     open fun addCard(card: Card) {
