@@ -17,5 +17,5 @@ abstract class Pile {
 
     open fun size(): Int = cards.size
 
-    open fun getCards(): List<Card> = cards.toList()
+    open fun getCardsCopy(): List<Card> = cards.toList()
 }
