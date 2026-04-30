@@ -9,7 +9,7 @@ class TablePile: Pile() {
      * also card can be placed iff the top card is greater for 1 and
      * has another color**/
 
-    fun canPlace(card: Card): Boolean{
+    override fun canPlace(card: Card): Boolean{
         val top = topCard()
         if (top == null) return card.rank == Rank.KING
         return card.rank.value == top.rank.value - 1 &&

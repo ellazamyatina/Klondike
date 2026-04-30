@@ -7,8 +7,8 @@ import model.Card
 /** target suit has to be as the same as the  foundation pile requires it
  * also check if foundation pile is complete**/
 
-class FoundationPile(private val targetSuit: Suit): Pile() {
-    fun canPlace(card: Card): Boolean{
+class FoundationPile(val targetSuit: Suit): Pile() {
+    override fun  canPlace(card: Card): Boolean{
         if (card.suit != targetSuit) return false
         val top = topCard()
         if (top == null) return card.rank == Rank.ACE
