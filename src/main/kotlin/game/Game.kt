@@ -35,7 +35,7 @@ class Game{
 
         // remainder located in the Stock Pile
         while(index < deck.size){
-            stock.addCard(deck[index++].copy())
+            stock.addCard(deck[index++].copy(isFaceUp = false))
         }
     }
 
@@ -50,17 +50,38 @@ class Game{
         val bottomCard = move.cards.last()
         if(!move.toPile.canPlace(bottomCard)) return false
 
-        // delete
+        // check if the card from tableau piles
+        // check the new card will be opened
+
+        val wasSourceTableau = move.fromPile is TablePile
+        var revealedNewCard = false
+
         move.cards.forEach {move.fromPile.removeTop()}
 
-        // open new card for tableau
-        flipNewTopIfTableau(move.fromPile)
+        // open new card in the Tableau
+        if (wasSourceTableau && !move.fromPile.isEmpty()) {
+            val newTop = move.fromPile.topCard()
+            if (newTop != null && !newTop.isFaceUp) {
+                move.fromPile.removeTop()
+                move.fromPile.addCard(newTop.copy(isFaceUp = true))
+                revealedNewCard = true
+            }
+        }
 
         // add new card, bottom card should be placed first
         move.cards.reversed().forEach { move.toPile.addCard(it) }
 
+        // save move
+        val moveWithState = Move(
+            fromPile = move.fromPile,
+            toPile = move.toPile,
+            cards = move.cards,
+            wasSourceTableau = wasSourceTableau,
+            revealedNewCard = revealedNewCard,
+        )
+
         // save for undo
-        moveHistory.add(move)
+        moveHistory.add(moveWithState)
         return true
     }
 
@@ -69,8 +90,15 @@ class Game{
         if (moveHistory.isEmpty()) return false
 
         val lastMove = moveHistory.removeAt(moveHistory.lastIndex)
-
         lastMove.cards.forEach {lastMove.fromPile.addCard(it)}
+
+        if (lastMove.wasSourceTableau && lastMove.revealedNewCard){
+            val top = lastMove.fromPile.topCard()
+            if (top!= null && top.isFaceUp){
+                lastMove.fromPile.removeTop()
+                lastMove.fromPile.addCard(top.copy(isFaceUp = false))
+            }
+        }
         repeat(lastMove.cards.size) { lastMove.toPile.removeTop()}
         return true
     }
