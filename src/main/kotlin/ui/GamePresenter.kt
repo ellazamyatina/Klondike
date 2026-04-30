@@ -1,7 +1,6 @@
 package ui
 
 import game.Game
-import game.TablePile
 import model.Move
 
 class GamePresenter {
@@ -27,14 +26,19 @@ class GamePresenter {
                 is Command.Start -> {
                     game = Game()
                     game.initialize()
-                    Display.printMessage("Tne new game was started")
+                    Display.printMessage("The new game was started")
                 }
 
                 is Command.Undo -> {
                     if (::game.isInitialized) {
-                        if (game.undo()) Display.printMessage("Move was undid!")
-                        else Display.printMessage("Nothing to undo!")
-                    } else Display.printMessage("Start the game!")
+                        if (game.undo()) {
+                            Display.printMessage("Move was undone!")
+                        } else {
+                            Display.printMessage("Nothing to undo!")
+                        }
+                    } else {
+                        Display.printMessage("Start the game first!")
+                    }
                 }
 
                 is Command.Draw -> {
@@ -48,11 +52,13 @@ class GamePresenter {
                         val card = game.stock.drawCard()
                         if (card != null) {
                             game.waste.addCard(card)
-                            Display.printMessage("Your Card: $card")
+                            Display.printMessage("Your card: $card")
                         } else {
                             Display.printMessage("The pile is empty!")
                         }
-                    } else Display.printMessage("Start the game!")
+                    } else {
+                        Display.printMessage("Start the game first!")
+                    }
                 }
 
                 is Command.MoveFromWaste -> {
@@ -61,17 +67,23 @@ class GamePresenter {
                         if (wasteCard == null) {
                             Display.printMessage("Waste is empty!")
                         } else {
-                            val toPile = if (command.toFoundation) {
-                                game.foundations.getOrNull(command.toPileIndex)
-                            } else {
-                                game.tableau.getOrNull(command.toPileIndex)
-                            }
+                            val toPile =
+                                if (command.toFoundation) {
+                                    game.foundations.getOrNull(command.toPileIndex)
+                                } else {
+                                    game.tableau.getOrNull(command.toPileIndex)
+                                }
 
                             if (toPile != null) {
                                 val move = Move(game.waste, toPile, listOf(wasteCard))
-                                if (game.makeMove(move)) Display.printMessage("Move done")
-                                else Display.printMessage("Wrong move")
-                            } else Display.printMessage("Invalid number of the pile!")
+                                if (game.makeMove(move)) {
+                                    Display.printMessage("Move done!")
+                                } else {
+                                    Display.printMessage("Wrong move!")
+                                }
+                            } else {
+                                Display.printMessage("Invalid pile number!")
+                            }
                         }
                     }
                 }
@@ -82,15 +94,20 @@ class GamePresenter {
                         val toPile = game.tableau.getOrNull(command.to)
 
                         if (fromPile != null && toPile != null) {
-                            if (fromPile is TablePile) {
-                                val cards = fromPile.getTopCards(command.count)
-                                if (cards.isNotEmpty()) {
-                                    val move = Move(fromPile, toPile, cards)
-                                    if (game.makeMove(move)) Display.printMessage("Move done")
-                                    else Display.printMessage("Wrong move!")
-                                } else Display.printMessage("No cards for replacement")
+                            val cards = fromPile.getTopCards(command.count)
+                            if (cards.isNotEmpty()) {
+                                val move = Move(fromPile, toPile, cards)
+                                if (game.makeMove(move)) {
+                                    Display.printMessage("Move done!")
+                                } else {
+                                    Display.printMessage("Wrong move!")
+                                }
+                            } else {
+                                Display.printMessage("No cards to move")
                             }
-                        } else Display.printMessage("Wrong number of tableau(0-6)")
+                        } else {
+                            Display.printMessage("Wrong tableau number (0-6)")
+                        }
                     }
                 }
 
@@ -103,9 +120,16 @@ class GamePresenter {
                             val card = fromPile.topCard()
                             if (card != null && card.isFaceUp) {
                                 val move = Move(fromPile, toPile, listOf(card))
-                                if (game.makeMove(move)) Display.printMessage("Move is done")
-                                else Display.printMessage("Wrong move!")
+                                if (game.makeMove(move)) {
+                                    Display.printMessage("Move done!")
+                                } else {
+                                    Display.printMessage("Wrong move!")
+                                }
+                            } else {
+                                Display.printMessage("No face-up card to move")
                             }
+                        } else {
+                            Display.printMessage("Invalid pile number")
                         }
                     }
                 }
@@ -115,12 +139,11 @@ class GamePresenter {
                 }
             }
 
-
             if (::game.isInitialized && command !is Command.Help && command !is Command.Quit) {
                 Display.printGame(game)
 
                 if (game.isGameWon()) {
-                    Display.printMessage("You win!")
+                    Display.printMessage("You win! ")
                     playing = false
                 }
             }

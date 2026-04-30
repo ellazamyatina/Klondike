@@ -1,13 +1,13 @@
 package model
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
 import game.FoundationPile
 import game.TablePile
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
-class MoveTest{
+class MoveTest {
     @Test
-    fun `move stores cards correctly`(){
+    fun `move stores cards correctly`() {
         val fromPile = TablePile()
         val toPile = TablePile()
         val card1 = Card(Rank.FOUR, Suit.SPADES, true)
@@ -19,14 +19,13 @@ class MoveTest{
         assertEquals(card1, move.cards[0])
         assertEquals(card2, move.cards[1])
     }
+
     @Test
-    fun `check pretty output`(){
+    fun `check pretty output`() {
         val fromPile = TablePile()
         val toPile = FoundationPile(Suit.HEARTS)
         val cards = listOf(Card(Rank.JACK, Suit.DIAMONDS, true))
         val move = Move(fromPile, toPile, cards)
         assertEquals("Move 1 card(s) from TablePile to FoundationPile", move.toString())
     }
-
-
 }

@@ -7,9 +7,9 @@ data class Move(
     val toPile: Pile,
     val cards: List<Card>,
     val wasSourceTableau: Boolean = false,
-    val revealedNewCard: Boolean = false,  // did the new card opened
+    val revealedNewCard: Boolean = false, // did the new card opened
 ) {
     override fun toString(): String =
-        "Move ${cards.size} card(s) from ${fromPile::class.simpleName} to " + // for good output, simpleName returns name of the current Pile
+        "Move ${cards.size} card(s) from ${fromPile::class.simpleName} to " +
             "${toPile::class.simpleName}"
 }

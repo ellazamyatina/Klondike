@@ -6,11 +6,12 @@ import model.Rank
 import model.Suit
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class GameTest {
     private val game = Game()
+
     @Test
     fun `initialize deals correct number of cards to tableau and stock`() {
         game.initialize()
@@ -27,11 +28,13 @@ class GameTest {
             assertTrue(pile.topCard()?.isFaceUp ?: false)
         }
     }
+
     @Test
     fun `initialize creates 4 foundation piles`() {
         game.initialize()
         assertEquals(4, game.foundations.size)
     }
+
     @Test
     fun `makeMove returns false for invalid move to foundation`() {
         game.initialize()
@@ -84,6 +87,7 @@ class GameTest {
         assertEquals(0, heartsFoundation.size())
         assertEquals(1, game.waste.size())
     }
+
     @Test
     fun `isGameWon returns true when all foundations are complete`() {
         for (foundation in game.foundations) {

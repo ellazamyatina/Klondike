@@ -3,7 +3,6 @@ package ui
 import game.Game
 
 object Display {
-
     fun printTitle() {
         println("||==||  KLONDIKE SOLITAIRE  ||==||  ")
     }
@@ -30,7 +29,7 @@ object Display {
         print("Foundations: ")
         game.foundations.forEachIndexed { i, f ->
             val top = f.topCard()
-            print("[${i}: ${top?.toString() ?: "·"}] ")
+            print("[$i: ${top?.toString() ?: "·"}] ")
         }
         println()
 
@@ -43,11 +42,12 @@ object Display {
                 val cards = pile.getCardsCopy()
                 if (row < cards.size) {
                     val card = cards[row]
-                    val display = if (card.isFaceUp) {
-                        card.toString()
-                    } else {
-                        "🂠"
-                    }
+                    val display =
+                        if (card.isFaceUp) {
+                            card.toString()
+                        } else {
+                            "🂠"
+                        }
                     print("$display     ")
                 } else {
                     print("      ")
