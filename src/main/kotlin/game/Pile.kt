@@ -23,4 +23,5 @@ abstract class Pile {
         val top = topCard()?.toString() ?: "empty"
         return "Pile size = ${cards.size}, top = $top"
     }
+    open fun canPlace(card: Card): Boolean = false
 }
