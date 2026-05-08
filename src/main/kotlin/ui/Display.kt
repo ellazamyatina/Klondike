@@ -64,6 +64,6 @@ object Display {
 
     fun prompt(): String {
         print("\n>")
-        return readln().trim() ?: ""
+        return readLine()?.trim() ?: ""
     }
 }

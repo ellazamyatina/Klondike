@@ -128,8 +128,6 @@ class Game {
 }
 
 
-// сделать pilefactory приватным методом в game
 // красиво разделить, добавить Input handler
 // в card убрали data class и нужно убрать copies
 // убрать все copies, будем просто менять состояние card
-// контейнер вместо laterinit

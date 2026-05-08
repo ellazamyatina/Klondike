@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "2.3.0"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
+    application
 }
 
 group = "org.example"
@@ -16,6 +17,10 @@ dependencies {
 
 kotlin {
     jvmToolchain(21)
+}
+
+application {
+    mainClass.set("MainKt")
 }
 
 tasks.test {
