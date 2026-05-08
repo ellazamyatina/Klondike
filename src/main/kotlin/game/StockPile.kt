@@ -8,7 +8,8 @@ class StockPile : Pile() {
 
     fun drawCard(): Card? {
         val card = removeTop()
-        return card?.copy(isFaceUp = true)
+        card?.flip()
+        return card
     }
 
     /** return cards from the Waste Pile for the Stock Pile
@@ -16,7 +17,8 @@ class StockPile : Pile() {
 
     fun resetFromWaste(wasteCards: List<Card>) {
         wasteCards.reversed().forEach { card ->
-            addCard(card.copy(isFaceUp = false))
+            card.isFaceUp = false
+            addCard(card)
         }
     }
 }

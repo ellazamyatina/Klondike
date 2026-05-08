@@ -120,8 +120,7 @@ class Game {
         if (pile is TablePile && !pile.isEmpty()) {
             val top: Card? = pile.topCard()
             if (top != null && !top.isFaceUp) {
-                pile.removeTop()
-                pile.addCard(top.copy(isFaceUp = true))
+                top.flip()
             }
         }
     }
