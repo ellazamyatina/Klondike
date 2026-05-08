@@ -2,8 +2,8 @@ package game
 
 import model.Card
 import model.Move
+import model.Rank
 import model.Suit
-import model.createShuffledPile
 
 class Game {
     // make all piles for the game
@@ -15,6 +15,19 @@ class Game {
 
     // move history
     private val moveHistory = mutableListOf<Move>()
+
+    /** function for creating the main shuffled pile **/
+
+    private fun createShuffledPile(): List<Card> {
+        val pile = mutableListOf<Card>()
+        for (rank in Rank.entries) {
+            for (suit in Suit.entries) {
+                val card = Card(rank, suit)
+                pile.add(card)
+            }
+        }
+        return pile.shuffled()
+    }
 
     fun initialize() {
         val deck = createShuffledPile()
@@ -113,3 +126,10 @@ class Game {
         }
     }
 }
+
+
+// сделать pilefactory приватным методом в game
+// красиво разделить, добавить Input handler
+// в card убрали data class и нужно убрать copies
+// убрать все copies, будем просто менять состояние card
+// контейнер вместо laterinit
