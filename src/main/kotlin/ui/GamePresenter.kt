@@ -11,8 +11,7 @@ class GamePresenter {
 
         var playing = true
         while (playing) {
-            val input = Display.prompt()
-            val command = Command.parse(input)
+            val command = InputHandler.readCommand()
             val currentGame = game
 
             when (command) {
