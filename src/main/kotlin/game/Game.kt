@@ -39,20 +39,21 @@ class Game {
                 val card = deck[index++]
 
                 // the top card is face up (row == col)
-                tableau[col].addCard(card.copy(isFaceUp = (row == col)))
+                val isFaceUp = (row == col)
+                tableau[col].addCard(Card(card.rank, card.suit, isFaceUp))
             }
         }
 
-        // remainder located in the Stock Pile
+        // remaining cards go to the Stock Pile (face down)
         while (index < deck.size) {
-            stock.addCard(deck[index++].copy(isFaceUp = false))
+            val card = deck[index++]
+            stock.addCard(Card(card.rank, card.suit))
         }
     }
 
     // make move, return true if the move is valid and done
 
     fun makeMove(move: Move): Boolean {
-        // empty move
         if (move.cards.isEmpty()) return false
 
         // the target card for move
@@ -71,8 +72,7 @@ class Game {
         if (wasSourceTableau && !move.fromPile.isEmpty()) {
             val newTop = move.fromPile.topCard()
             if (newTop != null && !newTop.isFaceUp) {
-                move.fromPile.removeTop()
-                move.fromPile.addCard(newTop.copy(isFaceUp = true))
+                newTop.isFaceUp = true
                 revealedNewCard = true
             }
         }
@@ -102,11 +102,11 @@ class Game {
         val lastMove = moveHistory.removeAt(moveHistory.lastIndex)
         lastMove.cards.forEach { lastMove.fromPile.addCard(it) }
 
+        // if a card was revealed during the move, hide it back
         if (lastMove.wasSourceTableau && lastMove.revealedNewCard) {
             val top = lastMove.fromPile.topCard()
             if (top != null && top.isFaceUp) {
-                lastMove.fromPile.removeTop()
-                lastMove.fromPile.addCard(top.copy(isFaceUp = false))
+                top.isFaceUp = false
             }
         }
         repeat(lastMove.cards.size) { lastMove.toPile.removeTop() }
@@ -126,7 +126,3 @@ class Game {
     }
 }
 
-
-// красиво разделить, добавить Input handler
-// в card убрали data class и нужно убрать copies
-// убрать все copies, будем просто менять состояние card
