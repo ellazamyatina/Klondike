@@ -4,8 +4,7 @@ import game.Game
 import model.Move
 
 class GamePresenter {
-    private lateinit var game: Game
-
+    private var game: Game? = null
     fun start() {
         Display.printTitle()
         Display.printHelp()
@@ -14,6 +13,7 @@ class GamePresenter {
         while (playing) {
             val input = Display.prompt()
             val command = Command.parse(input)
+            val currentGame = game
 
             when (command) {
                 is Command.Help -> Display.printHelp()
@@ -24,63 +24,58 @@ class GamePresenter {
                 }
 
                 is Command.Start -> {
-                    game = Game()
-                    game.initialize()
+                    val newGame = Game()
+                    newGame.initialize()
+                    game = newGame
                     Display.printMessage("The new game was started")
                 }
 
                 is Command.Undo -> {
-                    if (::game.isInitialized) {
-                        if (game.undo()) {
-                            Display.printMessage("Move was undone!")
-                        } else {
-                            Display.printMessage("Nothing to undo!")
-                        }
-                    } else {
+                    if (currentGame == null) {
                         Display.printMessage("Start the game first!")
+                    } else if (currentGame.undo()) {
+                        Display.printMessage("Move was undone!")
+                    } else {
+                        Display.printMessage("Nothing to undo!")
                     }
                 }
 
                 is Command.Draw -> {
-                    if (::game.isInitialized) {
-                        if (game.stock.isEmpty() && !game.waste.isEmpty()) {
-                            val wasteCards = game.waste.clearAndReturn()
-                            game.stock.resetFromWaste(wasteCards)
+                    if (currentGame == null) {
+                        Display.printMessage("Start the game first!")
+                    } else {
+                        if (currentGame.stock.isEmpty() && !currentGame.waste.isEmpty()) {
+                            val wasteCards = currentGame.waste.clearAndReturn()
+                            currentGame.stock.resetFromWaste(wasteCards)
                             Display.printMessage("The pile was reshuffled!")
                         }
-
-                        val card = game.stock.drawCard()
+                        val card = currentGame.stock.drawCard()
                         if (card != null) {
-                            game.waste.addCard(card)
+                            currentGame.waste.addCard(card)
                             Display.printMessage("Your card: $card")
                         } else {
                             Display.printMessage("The pile is empty!")
                         }
-                    } else {
-                        Display.printMessage("Start the game first!")
                     }
                 }
 
                 is Command.MoveFromWaste -> {
-                    if (::game.isInitialized) {
-                        val wasteCard = game.waste.topCard()
+                    if (currentGame == null) {
+                        Display.printMessage("Start the game first!")
+                    } else {
+                        val wasteCard = currentGame.waste.topCard()
                         if (wasteCard == null) {
                             Display.printMessage("Waste is empty!")
                         } else {
-                            val toPile =
-                                if (command.toFoundation) {
-                                    game.foundations.getOrNull(command.toPileIndex)
-                                } else {
-                                    game.tableau.getOrNull(command.toPileIndex)
-                                }
-
+                            val toPile = if (command.toFoundation) {
+                                currentGame.foundations.getOrNull(command.toPileIndex)
+                            } else {
+                                currentGame.tableau.getOrNull(command.toPileIndex)
+                            }
                             if (toPile != null) {
-                                val move = Move(game.waste, toPile, listOf(wasteCard))
-                                if (game.makeMove(move)) {
-                                    Display.printMessage("Move done!")
-                                } else {
-                                    Display.printMessage("Wrong move!")
-                                }
+                                val move = Move(currentGame.waste, toPile, listOf(wasteCard))
+                                if (currentGame.makeMove(move)) Display.printMessage("Move done!")
+                                else Display.printMessage("Wrong move!")
                             } else {
                                 Display.printMessage("Invalid pile number!")
                             }
@@ -89,48 +84,36 @@ class GamePresenter {
                 }
 
                 is Command.Move -> {
-                    if (::game.isInitialized) {
-                        val fromPile = game.tableau.getOrNull(command.from)
-                        val toPile = game.tableau.getOrNull(command.to)
-
+                    if (currentGame == null) {
+                        Display.printMessage("Start the game first!")
+                    } else {
+                        val fromPile = currentGame.tableau.getOrNull(command.from)
+                        val toPile = currentGame.tableau.getOrNull(command.to)
                         if (fromPile != null && toPile != null) {
                             val cards = fromPile.getTopCards(command.count)
                             if (cards.isNotEmpty()) {
                                 val move = Move(fromPile, toPile, cards)
-                                if (game.makeMove(move)) {
-                                    Display.printMessage("Move done!")
-                                } else {
-                                    Display.printMessage("Wrong move!")
-                                }
-                            } else {
-                                Display.printMessage("No cards to move")
-                            }
-                        } else {
-                            Display.printMessage("Wrong tableau number (0-6)")
-                        }
+                                if (currentGame.makeMove(move)) Display.printMessage("Move done!")
+                                else Display.printMessage("Wrong move!")
+                            } else Display.printMessage("No cards to move")
+                        } else Display.printMessage("Wrong tableau number (0-6)")
                     }
                 }
 
                 is Command.MoveToFoundation -> {
-                    if (::game.isInitialized) {
-                        val fromPile = game.tableau.getOrNull(command.fromTableauIndex)
-                        val toPile = game.foundations.getOrNull(command.foundationIndex)
-
+                    if (currentGame == null) {
+                        Display.printMessage("Start the game first!")
+                    } else {
+                        val fromPile = currentGame.tableau.getOrNull(command.fromTableauIndex)
+                        val toPile = currentGame.foundations.getOrNull(command.foundationIndex)
                         if (fromPile != null && toPile != null) {
                             val card = fromPile.topCard()
                             if (card != null && card.isFaceUp) {
                                 val move = Move(fromPile, toPile, listOf(card))
-                                if (game.makeMove(move)) {
-                                    Display.printMessage("Move done!")
-                                } else {
-                                    Display.printMessage("Wrong move!")
-                                }
-                            } else {
-                                Display.printMessage("No face-up card to move")
-                            }
-                        } else {
-                            Display.printMessage("Invalid pile number")
-                        }
+                                if (currentGame.makeMove(move)) Display.printMessage("Move done!")
+                                else Display.printMessage("Wrong move!")
+                            } else Display.printMessage("No face-up card to move")
+                        } else Display.printMessage("Invalid pile number")
                     }
                 }
 
@@ -139,11 +122,11 @@ class GamePresenter {
                 }
             }
 
-            if (::game.isInitialized && command !is Command.Help && command !is Command.Quit) {
-                Display.printGame(game)
-
-                if (game.isGameWon()) {
-                    Display.printMessage("You win! ")
+            // Отрисовка и проверка победы
+            if (currentGame != null && command !is Command.Help && command !is Command.Quit) {
+                Display.printGame(currentGame)
+                if (currentGame.isGameWon()) {
+                    Display.printMessage("You win!")
                     playing = false
                 }
             }
