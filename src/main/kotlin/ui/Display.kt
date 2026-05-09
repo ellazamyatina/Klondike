@@ -21,6 +21,10 @@ object Display {
 
     fun printGame(game: Game?) {
         if (game == null) return
+        println()
+        println("────────────────────────────────────────")
+        println("Stock: ${game.stock.size()} | Waste: ${game.waste.topCard()?.toString() ?: "-"}")
+        println("Moves: ${game.movesCount}")
         println("\n" + "─".repeat(40))
 
         print("Stock: ${game.stock.size()} | ")

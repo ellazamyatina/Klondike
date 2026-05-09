@@ -12,6 +12,7 @@ class Game {
     val foundations = Suit.entries.map { FoundationPile(it) }
     val stock = StockPile()
     val waste = WastePile()
+    var movesCount: Int = 0
 
     // move history
     private val moveHistory = mutableListOf<Move>()
@@ -30,6 +31,7 @@ class Game {
     }
 
     fun initialize() {
+        movesCount = 0
         moveHistory.clear()
         val deck = createShuffledPile()
         var index = 0
@@ -93,6 +95,7 @@ class Game {
 
         // save for undo
         moveHistory.add(moveWithState)
+        movesCount++
         return true
     }
 
@@ -116,6 +119,7 @@ class Game {
             }
         }
         repeat(lastMove.cards.size) { lastMove.toPile.removeTop() }
+        movesCount++
         return true
     }
 
