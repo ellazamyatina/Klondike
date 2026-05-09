@@ -27,6 +27,8 @@ class GamePresenter {
                     newGame.initialize()
                     game = newGame
                     Display.printMessage("The new game was started")
+                    Display.printGame(game)
+                    System.out.flush()
                 }
 
                 is Command.Undo -> {
@@ -43,14 +45,8 @@ class GamePresenter {
                     if (currentGame == null) {
                         Display.printMessage("Start the game first!")
                     } else {
-                        if (currentGame.stock.isEmpty() && !currentGame.waste.isEmpty()) {
-                            val wasteCards = currentGame.waste.clearAndReturn()
-                            currentGame.stock.resetFromWaste(wasteCards)
-                            Display.printMessage("The pile was reshuffled!")
-                        }
-                        val card = currentGame.stock.drawCard()
-                        if (card != null) {
-                            currentGame.waste.addCard(card)
+                        if (currentGame.drawCardToWaste()) {
+                            val card = currentGame.waste.topCard()
                             Display.printMessage("Your card: $card")
                         } else {
                             Display.printMessage("The pile is empty!")
@@ -121,7 +117,6 @@ class GamePresenter {
                 }
             }
 
-            // Отрисовка и проверка победы
             if (currentGame != null && command !is Command.Help && command !is Command.Quit) {
                 Display.printGame(currentGame)
                 if (currentGame.isGameWon()) {

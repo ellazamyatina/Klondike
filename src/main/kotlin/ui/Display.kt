@@ -19,7 +19,8 @@ object Display {
         println("  help         - Help information")
     }
 
-    fun printGame(game: Game) {
+    fun printGame(game: Game?) {
+        if (game == null) return
         println("\n" + "─".repeat(40))
 
         print("Stock: ${game.stock.size()} | ")

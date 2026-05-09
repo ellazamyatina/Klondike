@@ -30,6 +30,7 @@ class Game {
     }
 
     fun initialize() {
+        moveHistory.clear()
         val deck = createShuffledPile()
         var index = 0
 
@@ -100,7 +101,12 @@ class Game {
         if (moveHistory.isEmpty()) return false
 
         val lastMove = moveHistory.removeAt(moveHistory.lastIndex)
-        lastMove.cards.forEach { lastMove.fromPile.addCard(it) }
+        lastMove.cards.forEach { card ->
+            if (lastMove.fromPile is StockPile) {
+                card.isFaceUp = false
+            }
+            lastMove.fromPile.addCard(card)
+        }
 
         // if a card was revealed during the move, hide it back
         if (lastMove.wasSourceTableau && lastMove.revealedNewCard) {
@@ -123,6 +129,25 @@ class Game {
                 top.flip()
             }
         }
+    }
+
+    // function for saving cards from waste to the moveHistory
+    fun drawCardToWaste(): Boolean {
+        if (stock.isEmpty() && !waste.isEmpty()) {
+            val wasteCards = waste.clearAndReturn()
+            stock.resetFromWaste(wasteCards)
+        }
+
+        val card = stock.drawCard()
+        if (card != null) {
+            waste.addCard(card)
+
+            val move = Move(stock, waste, listOf(card))
+            moveHistory.add(move)
+
+            return true
+        }
+        return false
     }
 }
 
