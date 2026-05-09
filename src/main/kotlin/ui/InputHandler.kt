@@ -6,7 +6,9 @@ object InputHandler {
      * and returns Command.Help if input is invalid
      */
         fun readCommand(): Command {
+            println()
             print("\n> ")
+            System.out.flush()
             val input = readLine()?.trim()
 
             if (input.isNullOrEmpty()) {
