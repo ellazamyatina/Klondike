@@ -32,3 +32,6 @@ ktlint {
     android.set(false)
     ignoreFailures.set(false)
 }
+tasks.named<JavaExec>("run") {
+    standardInput = System.`in`
+}
