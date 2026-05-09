@@ -2,11 +2,18 @@ package ui
 
 import game.Game
 import model.Move
+import session.SessionManager
 
 class GamePresenter {
     private var game: Game? = null
+    private val session = SessionManager()
 
     fun start() {
+        print("Enter player's name: ")
+        val name = readLine() ?: "Guest"
+        session.login(name)
+
+        println("Hi, ${session.currentPlayer?.name}! Your score: ${session.currentPlayer?.score}")
         Display.printTitle()
         Display.printHelp()
 
@@ -140,6 +147,7 @@ class GamePresenter {
                 Display.printGame(currentGame)
                 if (currentGame.isGameWon()) {
                     Display.printMessage("You win!")
+                    session.reportWin()
                     playing = false
                 }
             }

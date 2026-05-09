@@ -18,6 +18,6 @@ class TablePile : Pile() {
     // extra function for getting some cards from the pile
     fun getTopCards(count: Int): List<Card> {
         if (count > cards.size) return emptyList()
-        return cards.takeLast(count)
+        return cards.takeLast(count).reversed()
     }
 }
