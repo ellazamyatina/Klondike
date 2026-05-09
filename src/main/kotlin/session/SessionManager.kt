@@ -8,7 +8,7 @@ class SessionManager {
     private var currentGame: Game? = null
     private val registryFile = File("players_registry.txt")
 
-    fun login(name: String)  {
+    fun login(name: String) {
         currentPlayer = Player(name)
         loadPlayerData()
     }
@@ -21,7 +21,7 @@ class SessionManager {
 
     fun getActiveGame(): Game? = currentGame
 
-    fun reportWin()  {
+    fun reportWin() {
         currentPlayer?.let {
             it.wins++
             it.score += 100
@@ -30,7 +30,7 @@ class SessionManager {
         }
     }
 
-    private fun savePlayerData()  {
+    private fun savePlayerData() {
         val player = currentPlayer ?: return
 
         val lines = mutableListOf<String>()
