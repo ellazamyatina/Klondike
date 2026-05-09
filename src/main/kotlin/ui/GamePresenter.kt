@@ -5,6 +5,7 @@ import model.Move
 
 class GamePresenter {
     private var game: Game? = null
+
     fun start() {
         Display.printTitle()
         Display.printHelp()
@@ -62,15 +63,19 @@ class GamePresenter {
                         if (wasteCard == null) {
                             Display.printMessage("Waste is empty!")
                         } else {
-                            val toPile = if (command.toFoundation) {
-                                currentGame.foundations.getOrNull(command.toPileIndex)
-                            } else {
-                                currentGame.tableau.getOrNull(command.toPileIndex)
-                            }
+                            val toPile =
+                                if (command.toFoundation) {
+                                    currentGame.foundations.getOrNull(command.toPileIndex)
+                                } else {
+                                    currentGame.tableau.getOrNull(command.toPileIndex)
+                                }
                             if (toPile != null) {
                                 val move = Move(currentGame.waste, toPile, listOf(wasteCard))
-                                if (currentGame.makeMove(move)) Display.printMessage("Move done!")
-                                else Display.printMessage("Wrong move!")
+                                if (currentGame.makeMove(move)) {
+                                    Display.printMessage("Move done!")
+                                } else {
+                                    Display.printMessage("Wrong move!")
+                                }
                             } else {
                                 Display.printMessage("Invalid pile number!")
                             }
@@ -88,10 +93,17 @@ class GamePresenter {
                             val cards = fromPile.getTopCards(command.count)
                             if (cards.isNotEmpty()) {
                                 val move = Move(fromPile, toPile, cards)
-                                if (currentGame.makeMove(move)) Display.printMessage("Move done!")
-                                else Display.printMessage("Wrong move!")
-                            } else Display.printMessage("No cards to move")
-                        } else Display.printMessage("Wrong tableau number (0-6)")
+                                if (currentGame.makeMove(move)) {
+                                    Display.printMessage("Move done!")
+                                } else {
+                                    Display.printMessage("Wrong move!")
+                                }
+                            } else {
+                                Display.printMessage("No cards to move")
+                            }
+                        } else {
+                            Display.printMessage("Wrong tableau number (0-6)")
+                        }
                     }
                 }
 
@@ -105,10 +117,17 @@ class GamePresenter {
                             val card = fromPile.topCard()
                             if (card != null && card.isFaceUp) {
                                 val move = Move(fromPile, toPile, listOf(card))
-                                if (currentGame.makeMove(move)) Display.printMessage("Move done!")
-                                else Display.printMessage("Wrong move!")
-                            } else Display.printMessage("No face-up card to move")
-                        } else Display.printMessage("Invalid pile number")
+                                if (currentGame.makeMove(move)) {
+                                    Display.printMessage("Move done!")
+                                } else {
+                                    Display.printMessage("Wrong move!")
+                                }
+                            } else {
+                                Display.printMessage("No face-up card to move")
+                            }
+                        } else {
+                            Display.printMessage("Invalid pile number")
+                        }
                     }
                 }
 

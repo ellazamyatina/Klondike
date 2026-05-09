@@ -150,4 +150,3 @@ class Game {
         return false
     }
 }
-
