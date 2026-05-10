@@ -24,7 +24,7 @@ class StockPileTest {
         val wasteCards =
             listOf(
                 Card(Rank.FOUR, Suit.SPADES, true),
-                Card(Rank.EIGHT, Suit.SPADES, true),
+                Card(Rank.EIGHT, Suit.SPADES, true)
             )
         stock.resetFromWaste(wasteCards)
         assertEquals(2, stock.size())

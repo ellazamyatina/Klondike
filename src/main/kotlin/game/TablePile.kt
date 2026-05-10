@@ -9,10 +9,17 @@ class TablePile : Pile() {
      * has another color**/
 
     override fun canPlace(card: Card): Boolean {
-        val top = topCard()
-        if (top == null) return card.rank == Rank.KING
-        return card.rank.value == top.rank.value - 1 &&
-            card.suit.isBlack() != top.suit.isBlack()
+        if (cards.isEmpty()) {
+            return card.rank == model.Rank.KING
+        }
+
+        val top = cards.last()
+        val isRed = (card.suit.name == "HEARTS" || card.suit.name == "DIAMONDS")
+        val topIsRed = (top.suit.name == "HEARTS" || top.suit.name == "DIAMONDS")
+        val differentColor = isRed != topIsRed
+        val nextRank = top.rank.ordinal == card.rank.ordinal + 1
+
+        return differentColor && nextRank
     }
 
     // extra function for getting some cards from the pile

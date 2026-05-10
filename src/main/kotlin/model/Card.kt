@@ -3,7 +3,7 @@ package model
 class Card(
     val rank: Rank,
     val suit: Suit,
-    var isFaceUp: Boolean = false,
+    var isFaceUp: Boolean = false
 ) {
     fun flip() {
         isFaceUp = !isFaceUp
