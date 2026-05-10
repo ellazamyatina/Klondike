@@ -59,12 +59,9 @@ class Game {
     fun makeMove(move: Move): Boolean {
         if (move.cards.isEmpty()) return false
 
-        // the target card for move
-        val bottomCard = move.cards.last()
+        // tge targer card for move
+        val bottomCard = move.cards.first()
         if (!move.toPile.canPlace(bottomCard)) return false
-
-        // check if the card from tableau piles
-        // check the new card will be opened
 
         val wasSourceTableau = move.fromPile is TablePile
         var revealedNewCard = false
@@ -79,21 +76,17 @@ class Game {
                 revealedNewCard = true
             }
         }
-
         // add new card, bottom card should be placed first
-        move.cards.reversed().forEach { move.toPile.addCard(it) }
+        move.cards.forEach { move.toPile.addCard(it) }
 
-        // save move
-        val moveWithState =
-            Move(
-                fromPile = move.fromPile,
-                toPile = move.toPile,
-                cards = move.cards,
-                wasSourceTableau = wasSourceTableau,
-                revealedNewCard = revealedNewCard,
-            )
+        val moveWithState = Move(
+            fromPile = move.fromPile,
+            toPile = move.toPile,
+            cards = move.cards,
+            wasSourceTableau = wasSourceTableau,
+            revealedNewCard = revealedNewCard
+        )
 
-        // save for undo
         moveHistory.add(moveWithState)
         movesCount++
         return true
