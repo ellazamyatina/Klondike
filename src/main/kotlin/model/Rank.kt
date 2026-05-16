@@ -1,7 +1,7 @@
 package model
 
 enum class Rank(
-    val value: Int
+    val value: Int,
 ) {
     ACE(1),
     TWO(2),
@@ -15,7 +15,7 @@ enum class Rank(
     TEN(10),
     JACK(11),
     QUEEN(12),
-    KING(13)
+    KING(13),
     ;
 
     fun displaySymbol(): String =

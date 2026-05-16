@@ -12,23 +12,23 @@ sealed class Command {
     object Draw : Command()
 
     data class AddPlayer(
-        val name: String
+        val name: String,
     ) : Command()
 
     data class Move(
         val from: Int,
         val to: Int,
-        val count: Int = 1
+        val count: Int = 1,
     ) : Command()
 
     data class MoveToFoundation(
         val fromTableauIndex: Int,
-        val foundationIndex: Int
+        val foundationIndex: Int,
     ) : Command()
 
     data class MoveFromWaste(
         val toPileIndex: Int,
-        val toFoundation: Boolean = false
+        val toFoundation: Boolean = false,
     ) : Command()
 
     companion object {

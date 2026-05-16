@@ -31,7 +31,10 @@ class Main : Application() {
         window?.updateStatus("New game. Click on the card to start.")
     }
 
-    fun onCardClick(card: Card, pile: Pile) {
+    fun onCardClick(
+        card: Card,
+        pile: Pile,
+    ) {
         val game = game ?: return
         val window = window ?: return
 
@@ -53,7 +56,10 @@ class Main : Application() {
     }
 
     // function for getting pile of cards from target card to the top
-    private fun getStackFromCard(pile: TablePile, card: Card): List<Card> {
+    private fun getStackFromCard(
+        pile: TablePile,
+        card: Card,
+    ): List<Card> {
         val allCards = pile.getCardsCopy()
         val index = allCards.indexOfFirst { it == card && it.isFaceUp }
         return if (index >= 0 && index < allCards.size) {

@@ -8,7 +8,7 @@ import model.Suit
  * also check if foundation pile is complete**/
 
 class FoundationPile(
-    val targetSuit: Suit
+    val targetSuit: Suit,
 ) : Pile() {
     override fun canPlace(card: Card): Boolean {
         if (card.suit != targetSuit) return false

@@ -79,13 +79,14 @@ class Game {
         // add new card, bottom card should be placed first
         move.cards.forEach { move.toPile.addCard(it) }
 
-        val moveWithState = Move(
-            fromPile = move.fromPile,
-            toPile = move.toPile,
-            cards = move.cards,
-            wasSourceTableau = wasSourceTableau,
-            revealedNewCard = revealedNewCard
-        )
+        val moveWithState =
+            Move(
+                fromPile = move.fromPile,
+                toPile = move.toPile,
+                cards = move.cards,
+                wasSourceTableau = wasSourceTableau,
+                revealedNewCard = revealedNewCard,
+            )
 
         moveHistory.add(moveWithState)
         movesCount++

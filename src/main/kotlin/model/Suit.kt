@@ -4,7 +4,7 @@ enum class Suit {
     HEARTS,
     DIAMONDS,
     CLUBS,
-    SPADES
+    SPADES,
     ;
 
     fun isRed(): Boolean = this == HEARTS || this == DIAMONDS

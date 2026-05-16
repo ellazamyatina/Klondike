@@ -7,9 +7,8 @@ import model.Card
 class CardView(
     private val card: Card,
     isSelected: Boolean,
-    private val onClick: (Card, CardView) -> Unit
+    private val onClick: (Card, CardView) -> Unit,
 ) : ImageView() {
-
     init {
         // setting properties of card
         fitWidth = 70.0
@@ -28,11 +27,12 @@ class CardView(
 
     // function for loading right picture of the card
     private fun updateImage() {
-        val name = if (card.isFaceUp) {
-            "${card.rank}_${card.suit}.png"
-        } else {
-            "back.png"
-        }
+        val name =
+            if (card.isFaceUp) {
+                "${card.rank}_${card.suit}.png"
+            } else {
+                "back.png"
+            }
 
         val url = javaClass.getResource("/cards/$name")
         image = Image(url!!.toExternalForm(), 70.0, 100.0, true, true)
