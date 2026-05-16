@@ -1,29 +1,27 @@
 package javafx
 
+import game.Game
+import game.Pile
 import javafx.geometry.Pos
 import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.layout.*
 import javafx.stage.Stage
-import game.Game
-import game.Pile
-import game.TablePile
 import model.Card
 import model.Rank
 import model.Suit
 
-class GameWindow(private val main: Main) {        // link of the controller
-    private val root = BorderPane()               // divide the window in 5 frames
-    private val statusLabel = Label("...")   // status bar
-    private val gameTable = Pane()                // play fields
-
+class GameWindow(private val main: Main) { // link of the controller
+    private val root = BorderPane() // divide the window in 5 frames
+    private val statusLabel = Label("...") // status bar
+    private val gameTable = Pane() // play fields
 
     // function for making window
-    fun show(stage: Stage) {    // take OS window as reference
+    fun show(stage: Stage) { // take OS window as reference
         stage.apply {
             title = "Klondike Solitaire"
-            scene = Scene(root, 1000.0, 700.0)   // make scene
+            scene = Scene(root, 1000.0, 700.0) // make scene
             show()
         }
         setupUI()
@@ -62,11 +60,11 @@ class GameWindow(private val main: Main) {        // link of the controller
 
     // MAIN function, run after every move
     fun renderGame(game: Game, selectedCards: List<Card>?, selectedPile: Pile?) {
-        gameTable.children.clear()   // redraw
+        gameTable.children.clear() // redraw
 
-        val W = 70.0                 // just coordinates
+        val W = 70.0 // just coordinates
         val H = 100.0
-        val GAP= 15.0
+        val GAP = 15.0
 
         // 1. rendering Stock(Pile)
         if (game.stock.getCardsCopy().isNotEmpty()) {
@@ -80,7 +78,7 @@ class GameWindow(private val main: Main) {        // link of the controller
         // 2. rendering Waste
         if (game.waste.getCardsCopy().isNotEmpty()) {
             val top = game.waste.getCardsCopy().last()
-            val isSelected = selectedCards?.contains(top) == true && selectedPile === game.waste  // the same object in memory
+            val isSelected = selectedCards?.contains(top) == true && selectedPile === game.waste // the same object in memory
             val v = CardView(top, isSelected) { _, _ -> main.onCardClick(top, game.waste) }
             v.layoutX = 120.0
             v.layoutY = 40.0
@@ -88,14 +86,14 @@ class GameWindow(private val main: Main) {        // link of the controller
         }
 
         // 3. rendering Foundations
-        val suitSymbols = listOf("♥", "♦", "♣", "♠",)
+        val suitSymbols = listOf("♥", "♦", "♣", "♠")
 
         for (i in 0..3) {
             val pile = game.foundations[i]
             val fx = 500.0 + i * (W + GAP)
 
             // empty contour and suits
-            val foundationBase = StackPane().apply{
+            val foundationBase = StackPane().apply {
                 prefWidth = W
                 prefHeight = H
                 style = "-fx-border-color: rgba(255,255,255,0.3); -fx-border-width: 1;"

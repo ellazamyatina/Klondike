@@ -1,17 +1,17 @@
 package javafx
 
-import javafx.application.Application
-import javafx.stage.Stage
 import game.Game
 import game.Pile
 import game.TablePile
+import javafx.application.Application
+import javafx.stage.Stage
 import model.Card
 import model.Move
 import session.SessionManager
 
 class Main : Application() {
     private var window: GameWindow? = null
-    private  var game: Game? = null
+    private var game: Game? = null
     private val session = SessionManager()
     private var selectedCards: List<Card>? = null
     private var selectedSourcePile: Pile? = null
