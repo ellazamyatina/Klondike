@@ -119,7 +119,7 @@ class Game {
             }
         }
         repeat(lastMove.cards.size) { lastMove.toPile.removeTop() }
-        movesCount++
+        movesCount--
         return true
     }
 
@@ -148,6 +148,7 @@ class Game {
 
             val move = Move(stock, waste, listOf(card))
             moveHistory.add(move)
+            movesCount++
 
             return true
         }
