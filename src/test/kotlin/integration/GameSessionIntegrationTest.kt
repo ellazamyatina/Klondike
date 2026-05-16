@@ -36,7 +36,6 @@ class GameSessionIntegrationTest {
         assertEquals(24, game.stock.size())
     }
 
-
     @Test
     fun `game move count updates correctly with session`() {
         val game = sessionManager.startNewGame()
