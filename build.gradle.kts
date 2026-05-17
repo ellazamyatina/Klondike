@@ -23,6 +23,7 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("org.testfx:testfx-core:4.0.18")
     testImplementation("org.testfx:testfx-junit5:4.0.18")
+    implementation("org.xerial:sqlite-jdbc:3.41.2.2")
 }
 
 ktlint {
