@@ -1,0 +1,151 @@
+package game
+
+import model.Card
+import model.Move
+import model.Rank
+import model.Suit
+
+class Game {
+    // make all piles for the game
+
+    val tableau = List(7) { TablePile() }
+    val foundations = Suit.entries.map { FoundationPile(it) }
+    val stock = StockPile()
+    val waste = WastePile()
+    var movesCount: Int = 0
+
+    // move history
+    private val moveHistory = mutableListOf<Move>()
+
+    /** function for creating the main shuffled pile **/
+
+    private fun createShuffledPile(): List<Card> {
+        val pile = mutableListOf<Card>()
+        for (rank in Rank.entries) {
+            for (suit in Suit.entries) {
+                val card = Card(rank, suit)
+                pile.add(card)
+            }
+        }
+        return pile.shuffled()
+    }
+
+    fun initialize() {
+        movesCount = 0
+        moveHistory.clear()
+        val deck = createShuffledPile()
+        var index = 0
+
+        // put shuffled cards for 7 table piles
+        for (col in 0..6) {
+            repeat(col + 1) { row ->
+                val card = deck[index++]
+
+                // the top card is face up (row == col)
+                val isFaceUp = (row == col)
+                tableau[col].addCard(Card(card.rank, card.suit, isFaceUp))
+            }
+        }
+
+        // remaining cards go to the Stock Pile (face down)
+        while (index < deck.size) {
+            val card = deck[index++]
+            stock.addCard(Card(card.rank, card.suit))
+        }
+    }
+
+    // make move, return true if the move is valid and done
+
+    fun makeMove(move: Move): Boolean {
+        if (move.cards.isEmpty()) return false
+
+        // tge targer card for move
+        val bottomCard = move.cards.first()
+        if (!move.toPile.canPlace(bottomCard)) return false
+
+        val wasSourceTableau = move.fromPile is TablePile
+        var revealedNewCard = false
+
+        move.cards.forEach { move.fromPile.removeTop() }
+
+        // open new card in the Tableau
+        if (wasSourceTableau && !move.fromPile.isEmpty()) {
+            val newTop = move.fromPile.topCard()
+            if (newTop != null && !newTop.isFaceUp) {
+                newTop.isFaceUp = true
+                revealedNewCard = true
+            }
+        }
+        // add new card, bottom card should be placed first
+        move.cards.forEach { move.toPile.addCard(it) }
+
+        val moveWithState =
+            Move(
+                fromPile = move.fromPile,
+                toPile = move.toPile,
+                cards = move.cards,
+                wasSourceTableau = wasSourceTableau,
+                revealedNewCard = revealedNewCard,
+            )
+
+        moveHistory.add(moveWithState)
+        movesCount++
+        return true
+    }
+
+    // undo the last move
+    fun undo(): Boolean {
+        if (moveHistory.isEmpty()) return false
+
+        val lastMove = moveHistory.removeAt(moveHistory.lastIndex)
+        lastMove.cards.forEach { card ->
+            if (lastMove.fromPile is StockPile) {
+                card.isFaceUp = false
+            }
+            lastMove.fromPile.addCard(card)
+        }
+
+        // if a card was revealed during the move, hide it back
+        if (lastMove.wasSourceTableau && lastMove.revealedNewCard) {
+            val top = lastMove.fromPile.topCard()
+            if (top != null && top.isFaceUp) {
+                top.isFaceUp = false
+            }
+        }
+        repeat(lastMove.cards.size) { lastMove.toPile.removeTop() }
+        movesCount--
+        return true
+    }
+
+    fun isGameWon(): Boolean = foundations.all { it.isComplete() }
+
+    // function for open new cards in the tableau
+    private fun flipNewTopIfTableau(pile: Pile) {
+        if (pile is TablePile && !pile.isEmpty()) {
+            val top: Card? = pile.topCard()
+            if (top != null && !top.isFaceUp) {
+                top.flip()
+            }
+        }
+    }
+
+    // function for saving cards from waste to the moveHistory
+    fun drawCardToWaste(): Boolean {
+        if (stock.isEmpty() && !waste.isEmpty()) {
+            val wasteCards = waste.clearAndReturn()
+            stock.resetFromWaste(wasteCards)
+        }
+
+        val card = stock.drawCard()
+        if (card != null) {
+            waste.addCard(card)
+
+            val move = Move(stock, waste, listOf(card))
+            moveHistory.add(move)
+            movesCount++
+
+            return true
+        }
+        return false
+    }
+}

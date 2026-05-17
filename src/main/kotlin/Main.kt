@@ -1,3 +1,6 @@
+import ui.GamePresenter
+
 fun main() {
-    println("hello, world!")
+    val presenter = GamePresenter()
+    presenter.start()
 }

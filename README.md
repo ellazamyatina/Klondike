@@ -11,8 +11,13 @@ and it's also available as a [raw file](docs/architecture.drawio) and picture in
 
 >For this project I use klinter as linter.
 
-1st-year SPBU student, "Technology of Programming", group 43, Ella Zamyatina
+### Src structure:
+* /model - core entities & classes, data classes
+* /game - game logic
+* /ui - user interface
 
+1st-year SPBU student, "Technology of Programming", group 43, Ella Zamyatina
 ### Contacts
 * mail: ellazamyatina567@gmail.com
 * tg: brbdbrd
+
