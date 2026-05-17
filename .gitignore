@@ -44,3 +44,8 @@ bin/
 ### Mac OS ###
 .DS_Store
 /f-the-gameq
+
+# SQLite database
+*.db
+*.db-shm
+*.db-wal
